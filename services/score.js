@@ -60,12 +60,12 @@ exports.getWeeklyScoreRank = async (userId) => {
         const currentDate = new Date();
         let endOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
         const lastFullWeekEnd = new Date(endOfWeek);
-        lastFullWeekEnd.setDate(lastFullWeekEnd.getDate() - (lastFullWeekEnd.getDay() + 6) % 7);
+        lastFullWeekEnd.setHours(lastFullWeekEnd.getHours() + 5, lastFullWeekEnd.getMinutes() + 30);
         const weeklyScores = [];
         for (let weekStart = startOfWeek; weekStart <= lastFullWeekEnd; weekStart.setDate(weekStart.getDate() + 7)) {
             const weekEnd = new Date(weekStart);
             weekEnd.setDate(weekStart.getDate() + 7);
-
+            
             const weekScores = await scoreModel.aggregate([
                 {
                     $match: {
@@ -89,6 +89,7 @@ exports.getWeeklyScoreRank = async (userId) => {
                 scores: weekScores
             });
         }
+       
         endOfWeek.setHours(endOfWeek.getHours() + 5, endOfWeek.getMinutes() + 30);
         let currentDateNow = new Date();
         currentDateNow.setHours(currentDateNow.getHours() + 5, currentDateNow.getMinutes() + 30);
