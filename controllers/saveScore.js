@@ -5,17 +5,17 @@ exports.saveScore = async (req, res) => {
         let { userId, score } = req.body
         let user = await registerService.getUser(userId);
         if (!userId) {
-            res.status(500).json({ error: "userId is mandatory" });
+            return res.status(500).json({ error: "userId is mandatory" });
         }
         else if (!score) {
-            res.status(500).json({ error: "score is mandatory" });
+            return res.status(500).json({ error: "score is mandatory" });
         }
         else if (score < 50 || score > 500) {
-            res.status(500).json({ error: "score should be between 50 and 500" });
+            return res.status(500).json({ error: "score should be between 50 and 500" });
         }
         
         else if (user.length === 0) {
-            res.status(500).json({ error: "user not found" });
+            return res.status(500).json({ error: "user not found" });
         }
         else{
         let res1 = await scoreService.saveScores(userId, score)
@@ -30,11 +30,11 @@ exports.overallDashboard = async (req, res) => {
     try {
         let { userId } = req.body
         if (!userId) {
-            res.status(500).json({ error: "userId is mandatory" });
+            return res.status(500).json({ error: "userId is mandatory" });
         }
         let user = await registerService.getUser(userId);
         if (user.length === 0) {
-            res.status(500).json({ error: "user not found" });
+            return res.status(500).json({ error: "user not found" });
         }
         let res1 = await scoreService.overallRank(userId)
         return res.status(200).json(res1);
@@ -48,11 +48,11 @@ exports.getWeeklyScore = async (req, res) => {
     try {
         let { userId } = req.body
         if (!userId) {
-            res.status(500).json({ error: "userId is mandatory" });
+            return res.status(500).json({ error: "userId is mandatory" });
         }
         let user = await registerService.getUser(userId);
         if (user.length === 0) {
-            res.status(500).json({ error: "user not found" });
+            return res.status(500).json({ error: "user not found" });
         }
         let res1 = await scoreService.getWeeklyScoreRank(userId)
         
