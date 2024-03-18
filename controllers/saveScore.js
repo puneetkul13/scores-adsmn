@@ -3,22 +3,23 @@ const registerService = require("../services/register")
 exports.saveScore = async (req, res) => {
     try {
         let { userId, score } = req.body
-
+        let user = await registerService.getUser(userId);
         if (!userId) {
             res.status(500).json({ error: "userId is mandatory" });
         }
-        if (!score) {
+        else if (!score) {
             res.status(500).json({ error: "score is mandatory" });
         }
-        if (score < 50 || score > 500) {
+        else if (score < 50 || score > 500) {
             res.status(500).json({ error: "score should be between 50 and 500" });
         }
-        let user = await registerService.getUser(userId);
-        if (user.length === 0) {
+        
+        else if (user.length === 0) {
             res.status(500).json({ error: "user not found" });
         }
+        else{
         let res1 = await scoreService.saveScores(userId, score)
-        return res.status(200).json(res1);
+        return res.status(200).json(res1);}
     }
     catch (error) {
         return res.status(500).json({ error: 'error' })
