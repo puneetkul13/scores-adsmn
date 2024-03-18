@@ -92,28 +92,6 @@ exports.getWeeklyScoreRank = async (userId) => {
         endOfWeek.setHours(endOfWeek.getHours() + 5, endOfWeek.getMinutes() + 30);
         let currentDateNow = new Date();
         currentDateNow.setHours(currentDateNow.getHours() + 5, currentDateNow.getMinutes() + 30);
-        const weekScores = await scoreModel.aggregate([
-            {
-                $match: {
-                    createdAt: {
-                        $gte: endOfWeek,
-                        $lte: currentDateNow
-                    }
-                }
-            },
-            {
-                $group: {
-                    _id: "$userId",
-                    totalScore: { $sum: "$score" }
-                }
-            }
-        ]);
-
-        weeklyScores.push({
-            startDate: endOfWeek.toISOString(),
-            endDate: currentDateNow.toISOString(),
-            scores: weekScores
-        });
         console.log(endOfWeek)
         console.log(currentDateNow)
        
